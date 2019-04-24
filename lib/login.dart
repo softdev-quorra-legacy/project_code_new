@@ -68,8 +68,6 @@ class LoginState extends State<Login> {
               await auth.signInWithEmaiAndPassword(_email, _password);
           print('Sign in: $userId');
           globals.userId = userId;
-          getUser(userId);
-          print(globals.myUser.uid);
           _showQuestionDialog();
         } 
         //user signing up
@@ -78,6 +76,7 @@ class LoginState extends State<Login> {
               await auth.createUserWithEmailAndPassword(_email, _password);
           print('Register user: $userId');
           globals.userId = userId;
+
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -364,7 +363,7 @@ class LoginState extends State<Login> {
           text: "Allow",
           isDestructiveAction: true,
           onPressed: () {
-            readGames();
+            //readGames();
             Navigator.of(context).pushNamed('/map'); //Direct to home page
             print('home page: map');
           },

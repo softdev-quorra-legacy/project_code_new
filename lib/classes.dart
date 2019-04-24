@@ -17,6 +17,7 @@ class Game{
     this.gametype = title;
     this.playspace = fieldspace;
     this.players = 1;
+    this.allplayers = '';
   }
   Game.exists(String title, int mems, String playlist, Field fieldspace){
     this.gametype = title;
@@ -31,9 +32,9 @@ class Field{
   String name;
   double lat;
   double lon;
-  double pos;
+  int pos;
 
-  Field(String fname, double up, double down, double id){
+  Field(String fname, double up, double down, int id){
     this.name = fname;
     this.lat = up;
     this.lon = down;
@@ -60,146 +61,90 @@ var fields = [createField('Ferrand', 40.006009, -105.267693, 1), createField('No
 //connect to firebase
 final dbref = FirebaseDatabase.instance.reference();
 
+//function to create a field
+//takes name, both coorinates, id = pos in fields array
+Field createField(String fname, double lat, double lon, int id){
+  var field = new Field(fname, lat, lon, id);
+  return field;
+}
 
+//add a user to the database
 void addUser(String uid, String uname, String fname, String lname){
   var user = new User(uid, fname, lname, uname);
-  dbref.child('users').child(uid).set({
+  dbref.child('users').child(uid).set({ // db/users/[uid]
     'fname': user.fname,
     'lname': user.lname,
     'uname': user.username,
   });
 }
 
+//get the current user from the database
+//sets the global user
 void getUser(String uid){
+  print('begin getuser');
+  globals.userId = uid;
     dbref.child('users').child(uid).once().then((DataSnapshot usersnap){
-    //Map<dynamic, dynamic> details = usersnap.value;
-    print('makinguser');
+      //Map<dynamic, dynamic> uvals = usersnap.value;
+      //print(uvals.toString());
     var myUser = new User(uid, usersnap.value['fname'], usersnap.value['lname'], usersnap.value['uname']);
     globals.myUser = myUser;
-    print(myUser.username);
     });
 }
 
-//function to create a field
-//takes name, both coorinates, id = pos in fields array
-Field createField(String fname, double lat, double lon, double id){
-  var field = new Field(fname, lat, lon, id);
-  return field;
-}
-
-
 //function to create game, push to server
 //takes name of game and a field object //creates game with name, field, 1 player
-void createGame(String title, Field location){
+void createGame(String title, String fieldname, double fieldlat, double fieldlon, int id){
+  var location = new Field(fieldname, fieldlat, fieldlon, id);
   var game = new Game.full(title, location);
-  String allusers = globals.myUser.uid;
+ // String allusers = globals.myUser.uid;
   dbref.child('games').child(game.gametype).set({ //create game in database
     'location': game.playspace.name,
     'players': game.players,
-    'playerlist': allusers,
+    //'playerlist': allusers,
   });
   dbref.child('games').child(title).child('field').set({ //create field in game
     'name': location.name,
     'lat' : location.lat,
     'lon' : location.lon,
-    //'test': 'yeet',
-
   });
 }
 
 //call this when a player adds themselves to a game
 //just increments game's player count
-void updateGame(String title, double players, String uid){
+void updateGame(String title, String uid){
   Map gamemap = globals.gamemap;
-  print('we made it this far');
+  int players = gamemap[title].players;
+  players = players + 1;
   String uplayerlist = gamemap[title].allplayers;
-  print('right here');
-  uplayerlist = uplayerlist + ',' + uid;
+  String uidloc = globals.userId;
+  //String comma = ',';
+  uplayerlist = '$uplayerlist,$uidloc';
   dbref.child('games').child(title).update({
     'players': players,
     'playerlist': uplayerlist,
   });
+  readGames();
 }
 
 //call this to receive a list of game objects, one for each game in the db
+//sets the global game list
 void readGames(){
-  print('we is here');
+  //var tgame = new Game.exists('localgame', 3, 'yeet and yeetet', fields[0]);
   List<Game> games = [];
-  var i = 0;
   dbref.child('games').once().then((DataSnapshot snapshot){
     Map<dynamic, dynamic> values = snapshot.value;
-    print(values.toString());
-    print('wild');
     values.forEach((key, values){
-      //print('wilder');
       dbref.child('games').child(key).child('field').once().then((DataSnapshot fsnap){
-        //Map<dynamic, dynamic> fvalues = fsnap.value;
-        print('next game');
-        
-          /*String gname = key;
-          String fname = fvalues['name'];
-          double flat = fvalues['lat'];
-          double flon = fvalues['lon'];
-          int curplayers = values['players'];
-          print(gname);
-          print(fname);
-          print(flat);
-          print(flon);
-          print(curplayers.toString());*/
         games.add(new Game.exists(key, values['players'], values['playerlist'], new Field(fsnap.value['name'], fsnap.value['lat'], fsnap.value['lon'], fsnap.value['id'])));
         globals.gameslist = games;
-        /*Map<String, int> map = new Map.fromIterable(list,
-    key: (item) => item.toString(),
-    value: (item) => item * item);
-  */    
         Map<String, Game> gamemap = new Map.fromIterable(games,
         key: (game) => game.gametype,
         value: (game) => game,
         );
-        print('making the map');
-        print(gamemap.toString());
         globals.gamemap = gamemap;
-        print(games[i].gametype);
-        print(games[i].playspace.lat);
-        i = i + 1;
       });
-    });});
-    //return globals.gameslist;
     }
-        
-       /* Map<dynamic, dynamic> fvalues = fsnap.value;
-          fvalues.forEach((fkey, fval){
-            print(fkey);
-            print(fval);
-          });
-          }
-      
-        print(fvalues.toString());
-        print(values.toString());
-      );
-    });
-
-      games.add(new Game.exists(key, values['players'], new Field(fsnap.value['name'], fsnap.value['lat'], fsnap.value['lon'], fsnap.value['id'])));
-      }
-      );
-      }
-      );
-      print(games[1].playspace.name);
-      return games;
-      }*/
-
-
-
-/*
-void readFields(){
-  dbref.once().then((DataSnapshot fields){
-
-    Widget build(BuildContext context){
-      return MaterialApp(
-        title: fields.value
-      );
+    );
     }
-    print('Data: ${fields.value}');
-  }
-  );
-  }*/
+    );
+    }

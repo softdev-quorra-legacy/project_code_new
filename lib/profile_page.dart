@@ -17,8 +17,6 @@ class ProfileInfoState extends State<ProfileInfo> {
   String id;
   final db = Firestore.instance;
 
-  final _formKey = GlobalKey<FormState>();
-
   String name;
   String firstName;
   String lastName;
@@ -36,64 +34,6 @@ class ProfileInfoState extends State<ProfileInfo> {
     });
   }
 
-  Card buildItem(DocumentSnapshot doc) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'name: ${doc.data['name']}',
-              style: TextStyle(fontSize: 24),
-            ),
-            Text(
-              'username: ${doc.data['username']}',
-              style: TextStyle(fontSize: 24),
-            ),
-            Text(
-              'phone: ${doc.data['phone']}',
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () => updateData(doc),
-                  child: Text('Update', style: TextStyle(color: Colors.white)),
-                  color: Colors.green,
-                ),
-                SizedBox(width: 8),
-                FlatButton(
-                  onPressed: () => deleteData(doc),
-                  child: Text('Delete'),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  /*TextFormField buildTextFormField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: 'name',
-        fillColor: Colors.grey[300],
-        filled: true,
-      ),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please enter some text';
-        }
-      },
-      onSaved: (value) => name = value,
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,134 +43,102 @@ class ProfileInfoState extends State<ProfileInfo> {
       body: ListView(
         padding: EdgeInsets.all(8),
         children: <Widget>[
-          /*Form(
-             key: _formKey,
-             child: buildTextFormField(),
-           ),*/
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: id != null ? readData : null,
-                child: Text('Read', style: TextStyle(color: Colors.white)),
-                color: Colors.blue,
-              ),
-            ],
-          ),
-
 
           RaisedButton(
             //onPressed: createData,
-            child: Text('makeprofile', style: TextStyle(color: Colors.white)),
+            child: Text('Test: addUser', style: TextStyle(color: Colors.white)),
             color: Colors.green,
-
              onPressed: () {
-              addUser(globals.userId, 'uname', 'fname', 'lname');
+              addUser('fakeuid', 'testuname', 'testfname', 'testlname');
             },
-
-            
           ),
 
-          RaisedButton(
-            //onPressed: createData,
-            child: Text('makefield', style: TextStyle(color: Colors.white)),
-            color: Colors.green,
-            onPressed: () {
-              readGames();
-              createGame('mynewgame', createField('mynewfield', 1.0, 1.0, 2));
-            },
-
-          ),
-          
-          RaisedButton(
-            //onPressed: createData,
-            child: Text('updategame', style: TextStyle(color: Colors.white)),
-            color: Colors.green,
-            onPressed: () {
-              updateGame('mynewgame', 5, globals.myUser.uid);
-              //List<Game> games = readGames();
-              print(globals.gameslist[0].gametype);
-            },
-
-
-          ),
-          
-          
           RaisedButton(
                 //onPressed: createData,
-                child: Text('readuser', style: TextStyle(color: Colors.white)),
+                child: Text('Test: getUser', style: TextStyle(color: Colors.white)),
                 color: Colors.green,
                 onPressed: (){
-                  print(globals.myUser.username);
+                  String uid = 'fakeuid';
+                  getUser(uid);
                   print(globals.myUser.fname);
                   print(globals.myUser.lname);
-                },
-
-              
-              
+                  print(globals.myUser.username);
+                  print(globals.userId);
+                },            
               ),
 
-
-
-
-          /*StreamBuilder<QuerySnapshot>(
-            stream: db.collection('$usid').snapshots(), 
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(children: snapshot.data.documents.map((doc) => buildItem(doc)).toList());
-              } else {
-                return SizedBox();
-              }
+          RaisedButton(
+            //onPressed: createData,
+            child: Text('Test: createGame', style: TextStyle(color: Colors.white)),
+            color: Colors.green,
+            onPressed: () {
+              //readGames();
+              createGame('TestGame','mynewfield', 9.5, 7.3, 2);
+              //print('created game done');
+              //readGames();
+              //print(globals.gamemap['TestGame'].playspace.name);
             },
-          )*/
+          ),
+          
+          RaisedButton(
+            //onPressed: createData,
+            child: Text('Test: updateGame', style: TextStyle(color: Colors.white)),
+            color: Colors.green,
+            onPressed: () {
+              updateGame('TestGame', 'fakeuid');
+              readGames();
+            },
+          ),
+
+          RaisedButton(
+                //onPressed: createData,
+                child: Text('Test: readGames', style: TextStyle(color: Colors.white)),
+                color: Colors.green,
+                onPressed: (){
+                  readGames();
+                },
+              ),
+          RaisedButton(
+                //onPressed: createData,
+                child: Text('Test: BigTest', style: TextStyle(color: Colors.white)),
+                color: Colors.green,
+                onPressed: (){
+                  addUser('uidbigtest', 'unamebigtest', 'fnamebigtest', 'lnamebigtest');
+                  getUser('uidbigtest');
+                  print(globals.userId);
+                  print(globals.myUser.fname);
+                  print(globals.myUser.lname);
+                  print(globals.myUser.username);
+                  createGame('GameAdded', 'FieldAdded', 3.3, 3.3, 4);
+                  readGames();
+                  print('firstread');
+                  int i = 0;
+                  while(i < 3){
+                     print(globals.gameslist[i].gametype);
+                     print(globals.gameslist[i].allplayers);
+                     print(globals.gameslist[i].players);
+                     print(globals.gameslist[i].playspace.name);
+                     print(globals.gameslist[i].playspace.lat);
+                     print(globals.gameslist[i].playspace.lon);
+                     i++;
+                  } 
+                  updateGame('GameAdded', globals.userId);
+                  print('post-update');
+                  int j = 0;
+                  while(j < 3){
+                     print(globals.gameslist[j].gametype);
+                     print(globals.gameslist[j].allplayers);
+                     print(globals.gameslist[j].players);
+                     print(globals.gameslist[j].playspace.name);
+                     print(globals.gameslist[j].playspace.lat);
+                     print(globals.gameslist[j].playspace.lon);
+                     j++;
+                  } 
+                
+                },
+              ),
         ],
       ),
     );
-  }
-
-  /*void createData() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      DocumentReference ref = await db.collection('$usid').add({'name': ' 😎', 'username': randomTodo()});
-      setState(() => id = ref.documentID);
-      print(ref.documentID);
-    }
-  }*/
-
-  void readData() async {
-    DocumentSnapshot snapshot = await db.collection('$usid').document(id).get();
-    print(snapshot.data['name']);
-  }
-
-  void updateData(DocumentSnapshot doc) async {
-    await db
-        .collection('$usid')
-        .document(doc.documentID)
-        .updateData({'todo': 'please 🤫'});
-  }
-
-  void deleteData(DocumentSnapshot doc) async {
-    await db.collection('$usid').document(doc.documentID).delete();
-    setState(() => id = null);
-  }
-
-  String randomTodo() {
-    final randomNumber = Random().nextInt(4);
-    String todo;
-    switch (randomNumber) {
-      case 1:
-        todo = 'Like and subscribe 💩';
-        break;
-      case 2:
-        todo = 'Twitter @robertbrunhage 🤣';
-        break;
-      case 3:
-        todo = 'Patreon in the description 🤗';
-        break;
-      default:
-        todo = 'Leave a comment 🤓';
-        break;
-    }
-    return todo;
   }
 }
