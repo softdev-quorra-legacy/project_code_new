@@ -9,6 +9,7 @@ class Game{
   String gametype;
   Field playspace;
   int players;
+  String allplayers;
 
   Game();
 
@@ -17,10 +18,11 @@ class Game{
     this.playspace = fieldspace;
     this.players = 1;
   }
-  Game.exists(String title, int mems, Field fieldspace){
+  Game.exists(String title, int mems, String playlist, Field fieldspace){
     this.gametype = title;
     this.playspace = fieldspace;
     this.players = mems;
+    this.allplayers = playlist;
 
   }
 }
@@ -71,7 +73,8 @@ void addUser(String uid, String uname, String fname, String lname){
 void getUser(String uid){
     dbref.child('users').child(uid).once().then((DataSnapshot usersnap){
     //Map<dynamic, dynamic> details = usersnap.value;
-    var myUser = new User(uid, usersnap.value[dbref.child('users')], usersnap.value['lname'], usersnap.value['uname']);
+    print('makinguser');
+    var myUser = new User(uid, usersnap.value['fname'], usersnap.value['lname'], usersnap.value['uname']);
     globals.myUser = myUser;
     print(myUser.username);
     });
@@ -89,9 +92,11 @@ Field createField(String fname, double lat, double lon, double id){
 //takes name of game and a field object //creates game with name, field, 1 player
 void createGame(String title, Field location){
   var game = new Game.full(title, location);
+  String allusers = globals.myUser.uid;
   dbref.child('games').child(game.gametype).set({ //create game in database
     'location': game.playspace.name,
     'players': game.players,
+    'playerlist': allusers,
   });
   dbref.child('games').child(title).child('field').set({ //create field in game
     'name': location.name,
@@ -104,14 +109,20 @@ void createGame(String title, Field location){
 
 //call this when a player adds themselves to a game
 //just increments game's player count
-void updateGame(String title, double players){
+void updateGame(String title, double players, String uid){
+  Map gamemap = globals.gamemap;
+  print('we made it this far');
+  String uplayerlist = gamemap[title].allplayers;
+  print('right here');
+  uplayerlist = uplayerlist + ',' + uid;
   dbref.child('games').child(title).update({
     'players': players,
+    'playerlist': uplayerlist,
   });
 }
 
 //call this to receive a list of game objects, one for each game in the db
-List readGames(){
+void readGames(){
   print('we is here');
   List<Game> games = [];
   var i = 0;
@@ -135,14 +146,25 @@ List readGames(){
           print(flat);
           print(flon);
           print(curplayers.toString());*/
-        games.add(new Game.exists(key, values['players'], new Field(fsnap.value['name'], fsnap.value['lat'], fsnap.value['lon'], fsnap.value['id'])));
+        games.add(new Game.exists(key, values['players'], values['playerlist'], new Field(fsnap.value['name'], fsnap.value['lat'], fsnap.value['lon'], fsnap.value['id'])));
         globals.gameslist = games;
+        /*Map<String, int> map = new Map.fromIterable(list,
+    key: (item) => item.toString(),
+    value: (item) => item * item);
+  */    
+        Map<String, Game> gamemap = new Map.fromIterable(games,
+        key: (game) => game.gametype,
+        value: (game) => game,
+        );
+        print('making the map');
+        print(gamemap.toString());
+        globals.gamemap = gamemap;
         print(games[i].gametype);
         print(games[i].playspace.lat);
         i = i + 1;
       });
     });});
-    return globals.gameslist;
+    //return globals.gameslist;
     }
         
        /* Map<dynamic, dynamic> fvalues = fsnap.value;

@@ -69,6 +69,7 @@ class LoginState extends State<Login> {
           print('Sign in: $userId');
           globals.userId = userId;
           getUser(userId);
+          print(globals.myUser.uid);
           _showQuestionDialog();
         } 
         //user signing up
@@ -363,6 +364,7 @@ class LoginState extends State<Login> {
           text: "Allow",
           isDestructiveAction: true,
           onPressed: () {
+            readGames();
             Navigator.of(context).pushNamed('/map'); //Direct to home page
             print('home page: map');
           },

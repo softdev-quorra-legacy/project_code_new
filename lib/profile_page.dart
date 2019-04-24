@@ -136,17 +136,20 @@ class ProfileInfoState extends State<ProfileInfo> {
             child: Text('makefield', style: TextStyle(color: Colors.white)),
             color: Colors.green,
             onPressed: () {
-              createGame('makefield', createField('string', 1.0, 1.0, 2));
+              readGames();
+              createGame('mynewgame', createField('mynewfield', 1.0, 1.0, 2));
             },
 
           ),
           
           RaisedButton(
             //onPressed: createData,
-            child: Text('Update Game', style: TextStyle(color: Colors.white)),
+            child: Text('updategame', style: TextStyle(color: Colors.white)),
             color: Colors.green,
             onPressed: () {
-              updateGame('updategame', 1.0);
+              updateGame('mynewgame', 5, globals.myUser.uid);
+              //List<Game> games = readGames();
+              print(globals.gameslist[0].gametype);
             },
 
 
