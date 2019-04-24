@@ -68,14 +68,13 @@ void addUser(String uid, String uname, String fname, String lname){
   });
 }
 
-User getUser(String uid){
+void getUser(String uid){
     dbref.child('users').child(uid).once().then((DataSnapshot usersnap){
     //Map<dynamic, dynamic> details = usersnap.value;
     var myUser = new User(uid, usersnap.value[dbref.child('users')], usersnap.value['lname'], usersnap.value['uname']);
     globals.myUser = myUser;
     print(myUser.username);
     });
-    return globals.myUser;
 }
 
 //function to create a field

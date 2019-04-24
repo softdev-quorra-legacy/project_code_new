@@ -5,6 +5,7 @@ import 'package:flutter_alert/flutter_alert.dart';
 import 'auth.dart';
 import 'auth_provider.dart';
 import 'globals.dart' as globals;
+import 'classes.dart';
 
 class Login extends StatefulWidget {
   //Login({this.onSignedIn});
@@ -61,13 +62,17 @@ class LoginState extends State<Login> {
     if (validateAndSave()) {
       try {
         var auth = AuthProvider.of(context).auth;
+        //if the user exists and is logging in
         if (_formType == FormType.login) {
           String userId =
               await auth.signInWithEmaiAndPassword(_email, _password);
           print('Sign in: $userId');
           globals.userId = userId;
+          getUser(userId);
           _showQuestionDialog();
-        } else {
+        } 
+        //user signing up
+        else {
           String userId =
               await auth.createUserWithEmailAndPassword(_email, _password);
           print('Register user: $userId');

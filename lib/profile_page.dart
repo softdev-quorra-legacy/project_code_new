@@ -143,7 +143,7 @@ class ProfileInfoState extends State<ProfileInfo> {
           
           RaisedButton(
             //onPressed: createData,
-            child: Text('updatefield', style: TextStyle(color: Colors.white)),
+            child: Text('Update Game', style: TextStyle(color: Colors.white)),
             color: Colors.green,
             onPressed: () {
               updateGame('updategame', 1.0);
@@ -155,8 +155,14 @@ class ProfileInfoState extends State<ProfileInfo> {
           
           RaisedButton(
                 //onPressed: createData,
-                child: Text('readfield', style: TextStyle(color: Colors.white)),
+                child: Text('readuser', style: TextStyle(color: Colors.white)),
                 color: Colors.green,
+                onPressed: (){
+                  print(globals.myUser.username);
+                  print(globals.myUser.fname);
+                  print(globals.myUser.lname);
+                },
+
               
               
               ),

@@ -168,6 +168,8 @@ import 'package:flutter/material.dart';
 import 'package:pickup_app/form.dart';
 import 'crud.dart';
 import 'app.dart';
+import 'classes.dart';
+import 'globals.dart' as globals;
 
 // variable for input and to be added to database
 String curUserId;
@@ -396,6 +398,7 @@ class RegFormState extends State<RegForm> {
                      //print(widget.userId);
                      //print (Todo.userId);
                      // creates map similar to a dictionary with key and value key is 'String' type and value is 'dynamic' type
+                     addUser(globals.userId, first, last, username);
                      Map<String, dynamic> userData ={'first_name': first, 'last_name': last, 'phone': phone, 'userID': userId, 'username': username};
                      // calls crud object function to add data to cloud firestore
                      crudObj.addUserData(userData);
