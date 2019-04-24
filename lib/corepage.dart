@@ -11,51 +11,17 @@ import 'profile_page.dart';
 import 'auth_provider.dart';
 
 class CorePage extends StatelessWidget {
-//   @override
-//   State<StatefulWidget> createState() => new CorePageState();
-// }
-
-// //enum AuthStatus { notSignedIn, signedIn }
-
-// class CorePageState extends State<CorePage> {
-// //   AuthStatus curStatus = AuthStatus.notSignedIn;
-
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-//     var auth = AuthProvider.of(context).auth;
-//     auth.currentUser().then((userId) {
-//       setState(() {
-//         curStatus = userId == null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
-//       });
-//     });
-//   }
-
-//   void _signedIn() {
-//     setState(() {
-//       curStatus = AuthStatus.signedIn;
-//       print('signing in');
-//     });
-//   }
-
-//   void logOut() {
-//     setState(() {
-//       curStatus = AuthStatus.notSignedIn;
-//       print('signing out');
-//     });
-//   }
-
   @override
   Widget build(BuildContext context) {
     final BaseAuth auth = AuthProvider.of(context).auth;
     return StreamBuilder<String>(
         stream: auth.onAuthStateChanged,
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            final bool isLoggedin = snapshot.hasData;
-            return isLoggedin ?  Login() : ProfileInfo() ;//MapPage() 
+          if (snapshot.connectionState == ConnectionState.none) {
+            return buildWaitingScreen();
           }
-          return buildWaitingScreen();
+          final bool isLoggedin = snapshot.hasData;
+            return isLoggedin ? MapPage() : Login();
         });
   }
 

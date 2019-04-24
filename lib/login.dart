@@ -68,7 +68,7 @@ class LoginState extends State<Login> {
               await auth.signInWithEmaiAndPassword(_email, _password);
           print('Sign in: $userId');
           globals.userId = userId; //set the globla uid for session
-          _showQuestionDialog();
+          //_showQuestionDialog();
         } 
         //user signing up
         else {
@@ -344,7 +344,7 @@ class LoginState extends State<Login> {
     }
   }
 
-  void _showQuestionDialog() {
+  /*void _showQuestionDialog() {
     showAlert(
       context: context,
       title: 'Allow "Pick-UP" to access your location?',
@@ -371,5 +371,5 @@ class LoginState extends State<Login> {
         ),
       ],
     );
-  }
+  }*/
 }
