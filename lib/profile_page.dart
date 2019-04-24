@@ -58,7 +58,7 @@ class ProfileInfoState extends State<ProfileInfo> {
                 child: Text('Test: getUser', style: TextStyle(color: Colors.white)),
                 color: Colors.green,
                 onPressed: (){
-                  String uid = 'fakeuid';
+                  String uid = globals.userId;
                   getUser(uid);
                   print(globals.myUser.fname);
                   print(globals.myUser.lname);
@@ -85,7 +85,7 @@ class ProfileInfoState extends State<ProfileInfo> {
             child: Text('Test: updateGame', style: TextStyle(color: Colors.white)),
             color: Colors.green,
             onPressed: () {
-              updateGame('TestGame', 'fakeuid');
+              updateGame('TestGame', globals.userId);
               readGames();
             },
           ),

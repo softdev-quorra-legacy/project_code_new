@@ -67,7 +67,7 @@ class LoginState extends State<Login> {
           String userId =
               await auth.signInWithEmaiAndPassword(_email, _password);
           print('Sign in: $userId');
-          globals.userId = userId;
+          globals.userId = userId; //set the globla uid for session
           _showQuestionDialog();
         } 
         //user signing up
@@ -75,8 +75,7 @@ class LoginState extends State<Login> {
           String userId =
               await auth.createUserWithEmailAndPassword(_email, _password);
           print('Register user: $userId');
-          globals.userId = userId;
-
+          globals.userId = userId;//set the global uid for session
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -359,11 +358,13 @@ class LoginState extends State<Login> {
 //            Navigator.of(context).pushNamed('/');
           },
         ),
+        //last things to happen on login page
         AlertAction(
           text: "Allow",
           isDestructiveAction: true,
           onPressed: () {
-            //readGames();
+            readGames();
+            getUser(globals.userId);
             Navigator.of(context).pushNamed('/map'); //Direct to home page
             print('home page: map');
           },

@@ -197,7 +197,7 @@ class RegFormState extends State<RegForm> {
                     splashColor: Color(0xFF424242),//it revealed white only when it's in a pressed state
                    onPressed: () {
                      // creates map similar to a dictionary with key and value key is 'String' type and value is 'dynamic' type
-                     addUser(userId, first, last, username);
+                     addUser(userId, username, first, last);
                      globals.userId = userId;
                      Map<String, dynamic> userData ={'first_name': first, 'last_name': last, 'phone': phone, 'userID': userId, 'username': username};
                      // calls crud object function to add data to cloud firestore

@@ -96,11 +96,11 @@ void getUser(String uid){
 void createGame(String title, String fieldname, double fieldlat, double fieldlon, int id){
   var location = new Field(fieldname, fieldlat, fieldlon, id);
   var game = new Game.full(title, location);
- // String allusers = globals.myUser.uid;
+  String allusers = globals.userId;
   dbref.child('games').child(game.gametype).set({ //create game in database
     'location': game.playspace.name,
     'players': game.players,
-    //'playerlist': allusers,
+    'playerlist': allusers,
   });
   dbref.child('games').child(title).child('field').set({ //create field in game
     'name': location.name,
