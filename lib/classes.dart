@@ -74,19 +74,28 @@ final dbref = FirebaseDatabase.instance.reference();
 
 void setmarks(){
   print('Creating Pins');
+  print(globals.gameslist.length);
   int i = 0;
+  Set<Marker> mapmarks = new Set();
   while(i < globals.gameslist.length){
+    print('in the loop');
     Game game = globals.gameslist[i];
     print(game.gametype);
+    i = i + 1;
+    print(i);
     Marker thismark = Marker(
       markerId: MarkerId(game.gametype),
       position: LatLng(
         game.playspace.lat,
         game.playspace.lon,
       ),
+      infoWindow: InfoWindow(title: game.gametype, snippet: game.playspace.name)
     );
-    globals.mapmarks.add(thismark);
+    print('adding the mark');
+    mapmarks.add(thismark);
   }
+  print('taking marks global');
+  globals.mapmarks = mapmarks;
 }
 
 //function to create a field
@@ -163,6 +172,7 @@ void readGames(){
   List<Game> games = [];
   dbref.child('games').once().then((DataSnapshot snapshot){
     Map<dynamic, dynamic> values = snapshot.value;
+    print(values.toString());
     values.forEach((key, values){
       dbref.child('games').child(key).child('field').once().then((DataSnapshot fsnap){
         games.add(new Game.exists(key, values['players'], values['playerlist'], new Field(fsnap.value['name'], fsnap.value['lat'], fsnap.value['lon'], fsnap.value['id'])));
@@ -172,6 +182,7 @@ void readGames(){
         value: (game) => game,
         );
         globals.gamemap = gamemap;
+        setmarks();
       });
     }
     );
