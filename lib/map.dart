@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'auth.dart';
 import 'dart:async';
-import 'auth_provider.dart'
-;
+import 'auth_provider.dart';
+import 'globals.dart' as globals;
+
 class MapPage extends StatefulWidget{
   //MapPage({this.onLoggedOut});
   //final VoidCallback onLoggedOut;
@@ -77,24 +78,28 @@ class MapPageState extends State<MapPage>{
 
     //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Marker _pin = Marker(
-    markerId: MarkerId('_pin1'),
-    position: LatLng(40.006949, -105.262697)
+    markerId: MarkerId('Ferrand'),
+    position: LatLng(40.006009, -105.267693)
     //position: LatLng(40.009448,-105.266813)
     
     );      
    Marker _pin1 = Marker(
-    markerId: MarkerId('_pin2'),
-    position: LatLng(40.008708, -105.273021)
+    markerId: MarkerId('Norlin Quads'),
+    position: LatLng(40.008729, -105.271468)
     //position: LatLng(40.009448,-105.266813)
     );    
 
     Marker _pin2 = Marker(
-    markerId: MarkerId('_pin3'),
-    position: LatLng(40.009448, -105.266813)
+    markerId: MarkerId('Kittridge Fields'),
+    position: LatLng(40.002974, -105.259576)
     //position: LatLng(40.009448,-105.266813)
     );    
     
-
+    Marker _pin3 = Marker(
+    markerId: MarkerId('Engineering Quads'),
+    position: LatLng(40.006813, -105.264942)
+    //position: LatLng(40.009448,-105.266813)
+    );    
 
 
   @override
@@ -142,7 +147,7 @@ class MapPageState extends State<MapPage>{
                                         ),
                                       ),
                                       onPressed: (){
-                                        Navigator.of(context).pushNamed('/profile_page');
+                                        Navigator.of(context).pushNamed('/profile');
                                       },
                                     ),
                                   )
@@ -162,7 +167,9 @@ class MapPageState extends State<MapPage>{
                                         ),
                                       ),
                                       onPressed: (){
+                                        globals.userId = null; 
                                         widget.lougOut(context);
+                                        //var globals;
                                       },
                                     ),
                                   )
@@ -186,7 +193,7 @@ class MapPageState extends State<MapPage>{
                        _controller.complete(controller);
                        },
                       markers: {
-              _pin,_pin1,_pin2,
+              _pin,_pin1,_pin2,_pin3
             }
 
 
@@ -240,10 +247,10 @@ class MapPageState extends State<MapPage>{
   }
   
 
-  // Future<void> _goToTheField() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(_kFolsomField));
-  // }
+  /* Future<void> _goToTheField() async {
+     final GoogleMapController controller = await _controller.future;
+     controller.animateCamera(CameraUpdate.newCameraPosition(_kFolsomField));
+   }*/
 
 
 

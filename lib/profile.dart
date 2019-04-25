@@ -13,33 +13,24 @@ import 'auth.dart';
 crudMethods crudObj = new crudMethods();
 
 // ignore: camel_case_types
-class Profile extends StatefulWidget {
-
-
-  
+class ProfileO extends StatefulWidget {
   void lougOut(BuildContext context) async {
     try {
       var auth = AuthProvider.of(context).auth;
       await auth.signOut();
       //onLoggedOut();
-    }
-    catch(e) {
-    print(e);
+    } catch (e) {
+      print(e);
     }
   }
-
 
   @override
   ProfileState createState() => ProfileState();
 }
 
 // ignore: camel_case_types
-class ProfileState extends State<Profile> {
-
+class ProfileState extends State<ProfileO> {
   File _image;
-
-  
-  
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -97,7 +88,6 @@ class ProfileState extends State<Profile> {
                               ),
                               onPressed: () {
                                 Navigator.pushNamed(context, '/home');
-                                    
                               },
                             ),
                           )
@@ -125,37 +115,24 @@ class ProfileState extends State<Profile> {
                           ListTile(
                               leading: Container(
                             child: FlatButton(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Log Out",
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.white,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Log Out",
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              onPressed:() { 
-                                widget.lougOut(context);
-                                Navigator.pushNamed(context, '/');
-                              }
-                            ),
+                                onPressed: () {
+                                  widget.lougOut(context);
+                                  Navigator.pushNamed(context, '/');
+                                }),
                           )
                               //                                  Icon(Icons.settings),
                               //                                  title: Text('Settings')),
                               ),
-                          ListTile(
-                            leading: Container(
-                                child: globals.userId == null
-                                    ? Text("No signed in user")
-                                    : Text(
-                                        globals.userId,
-                                        textAlign: TextAlign.center,
-                                      )),
-                          ),
-                          ListTile(
-                            
-                          ),
                         ],
                       ))))
             ],
@@ -190,15 +167,12 @@ class ProfileState extends State<Profile> {
                             ? Text('No image selected.')
                             : Image.file(_image),
                       ),
-
                       decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                            fit: BoxFit.fill,
-
-                            image:
-                                ExactAssetImage('assets/default_profile.jpg'))
-                      ),
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: ExactAssetImage(
+                                  'assets/default_profile.jpg'))),
                     ),
                   ),
                 ),
@@ -219,6 +193,48 @@ class ProfileState extends State<Profile> {
                             getImage();
                           }),
                     ),
+                  ),
+                ),
+                ListTile(
+                  leading: StreamBuilder<QuerySnapshot>(
+                    stream: Firestore.instance
+                        .collection('users')
+                        .where('userID', isEqualTo: globals.userId)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          child: ListView(
+                            children: <Widget>[
+                              Text(
+                                "First Name: " + snapshot.data.documents[0]['first_name'],
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Last Name: " + snapshot.data.documents[0]['last_name'],
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Phone: " + snapshot.data.documents[0]['phone'],
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return new Center(
+                            child: new CircularProgressIndicator());
+                      }
+                    },
                   ),
                 ),
               ],

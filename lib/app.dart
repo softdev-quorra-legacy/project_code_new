@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pickup_app/map.dart';
-import 'package:pickup_app/profile.dart';
 import 'login.dart';
 import 'form.dart';
 import 'forgot_password.dart';
 import 'Prelogin.dart';
 import 'package:pickup_app/event_create.dart';
 import 'activity_search.dart';
-//import 'profile.dart';
-import 'profile_page.dart';
+//import 'profile_page.dart';
 import 'auth_provider.dart';
 import 'auth.dart';
 import 'corepage.dart';
+import 'user_info_alt.dart';
 
 class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -31,7 +30,8 @@ class MyApp extends StatelessWidget {
             '/activity_search': (context) => activity(),
             '/event_create': (context) => event(),
             '/profile': (context) => Profile(),
-            '/profile_page': (context) => ProfileInfo(),
+          //  '/profile_page': (context) => ProfileInfo(),
+
           },
         ));
   }

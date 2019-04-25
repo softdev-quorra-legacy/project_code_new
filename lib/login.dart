@@ -15,11 +15,6 @@ class Login extends StatefulWidget {
   LoginState createState() => LoginState();
 }
 
-enum FormType {
-  login,
-  signUp,
-}
-
 class LoginState extends State<Login> {
   bool passwordVisible; //declare passwordVisible
 
@@ -32,7 +27,7 @@ class LoginState extends State<Login> {
 
   String _email;
   String _password;
-  FormType _formType = FormType.login;
+
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -56,49 +51,18 @@ class LoginState extends State<Login> {
 
   }*/
 
-  bool isValid;
-
   void validateAndSubmit() async {
     if (validateAndSave()) {
+      var auth = AuthProvider.of(context).auth;
       try {
-        var auth = AuthProvider.of(context).auth;
         //if the user exists and is logging in
-        if (_formType == FormType.login) {
-          String userId =
-              await auth.signInWithEmaiAndPassword(_email, _password);
-          print('Sign in: $userId');
-          globals.userId = userId; //set the globla uid for session
+          globals.userId = await auth.signInWithEmaiAndPassword(_email, _password);
           //_showQuestionDialog();
-        } 
-        //user signing up
-        else {
-          String userId =
-              await auth.createUserWithEmailAndPassword(_email, _password);
-          print('Register user: $userId');
-          globals.userId = userId;//set the global uid for session
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RegForm(),
-              ));
-        }
-        //widget.onSignedIn();
+          Navigator.pushNamed(context, '/');
       } catch (e) {
         print('Error: $e');
       }
     }
-  }
-
-  void moveToSignUp() {
-    setState(() {
-      _formType = FormType.signUp;
-    });
-  }
-
-  void moveToLogin() {
-    setState(() {
-      _formType = FormType.login;
-    });
   }
 
   //final _usernameController = TextEditingController();
@@ -177,7 +141,6 @@ class LoginState extends State<Login> {
   }
 
   List<Widget> buildSubmitButtons() {
-    if (_formType == FormType.login) {
       return [
         ButtonBar(
           children: <Widget>[
@@ -193,7 +156,7 @@ class LoginState extends State<Login> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pushNamed('/forgot_password');
+                Navigator.pushNamed(context, '/forgot_password');
               },
             ),
             ButtonTheme(
@@ -228,7 +191,7 @@ class LoginState extends State<Login> {
                     0xFF424242), //it revealed white only when it's in a pressed state
                 onPressed: () {
                   // TODO: Show the next page (101)
-                  moveToSignUp();
+                  Navigator.pushNamed(context, '/form');
                 },
               ),
             ),
@@ -237,8 +200,8 @@ class LoginState extends State<Login> {
         new InkWell(
           splashColor: Color(
               0xFF424242), //it revealed white only when it's in a pressed state
-          onTap: () => Navigator.of(context)
-              .pushNamed('/home'), //Actions when tapping the button
+          onTap: () => Navigator
+              .pushNamed(context, '/home'), //Actions when tapping the button
           child: new Container(
             //width: 100.0,
             height: 35.0, //Button size
@@ -257,94 +220,9 @@ class LoginState extends State<Login> {
           ),
         )
       ];
-    } else {
-      return [
-        ButtonBar(
-          children: <Widget>[
-            FlatButton(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                    fontSize: 12.00, //The max size can fit in the button bar
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/forgot_password');
-              },
-            ),
-            ButtonTheme(
-              minWidth: 4.00,
-              height: 35.00,
-              child: RaisedButton(
-                child: const Text('Sign Up'),
-                textColor: Colors.orangeAccent,
-                color: Colors.white,
-                elevation: 4.0, //shadow of button
-                splashColor: Color(
-                    0xFF424242), //it revealed white only when it's in a pressed state
-                onPressed: () {
-                  validateAndSubmit();
-                },
-                /*{
-                        //if (_usernameController.TextEditingController == 'user' && _passwordController == 'password')
-                        Navigator.of(context).pushNamed('/home'); //Direct to home page
-                        print('home');
-                      },*/
-              ),
-            ),
-            ButtonTheme(
-              minWidth: 4.00,
-              height: 35.00,
-              child: RaisedButton(
-                child: const Text('Sign In'),
-                textColor: Colors.orangeAccent,
-                color: Colors.white,
-                elevation: 4.0, //shadow of button
-                splashColor: Color(
-                    0xFF424242), //it revealed white only when it's in a pressed state
-                onPressed: () {
-                  // TODO: Show the next page (101)
-                  /*Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Form_()),
-                        );*/
-                  moveToLogin();
-                },
-              ),
-            ),
-          ],
-        ),
-        new InkWell(
-          splashColor: Color(
-              0xFF424242), //it revealed white only when it's in a pressed state
-          onTap: () => Navigator.of(context)
-              .pushNamed('/home'), //Actions when tapping the button
-          child: new Container(
-            //width: 100.0,
-            height: 35.0, //Button size
-            decoration: new BoxDecoration(
-              color: Colors.white,
-              border: new Border.all(color: Colors.white),
-              borderRadius: new BorderRadius.circular(35.0),
-            ),
-            child: new Center(
-              child: new Text(
-                'Log in with Google account',
-                style:
-                    new TextStyle(fontSize: 16.0, color: Colors.orangeAccent),
-              ),
-            ),
-          ),
-        )
-      ];
-    }
-  }
+    } 
 
-  /*void _showQuestionDialog() {
+  void _showQuestionDialog() {
     showAlert(
       context: context,
       title: 'Allow "Pick-UP" to access your location?',
@@ -355,21 +233,18 @@ class LoginState extends State<Login> {
           isDestructiveAction: true,
           onPressed: () {
             print("Do Nothing");
-//            Navigator.of(context).pushNamed('/');
+           //Navigator.of(context).pushNamed('/home');
           },
         ),
-        //last things to happen on login page
         AlertAction(
           text: "Allow",
           isDestructiveAction: true,
           onPressed: () {
-            readGames();
-            getUser(globals.userId);
-            Navigator.of(context).pushNamed('/map'); //Direct to home page
+            //Navigator.pushNamed(context, '/home'); //Direct to home page
             print('home page: map');
           },
         ),
       ],
     );
-  }*/
+  }
 }

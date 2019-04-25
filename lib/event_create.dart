@@ -23,7 +23,7 @@ class event extends StatelessWidget {
                 ),
                 tooltip: 'Home(Map) Page',
                 onPressed: (){
-                Navigator.of(context).pushNamed('/map');
+                Navigator.of(context).pushNamed('/home');
                 }
               ),
             ),

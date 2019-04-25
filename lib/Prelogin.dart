@@ -45,7 +45,7 @@ class _PreState extends State<Pre_> {
   //              ),
               new InkWell(
                 splashColor: Color(0xFF424242),//it revealed white only when it's in a pressed state
-                onTap: () => Navigator.of(context).pushNamed('/map'), //Actions when tapping the button
+                onTap: () => Navigator.of(context).pushNamed('/home'), //Actions when tapping the button
                 child: new Container(
                   //width: 100.0,
                   height: 35.0, //Button size
@@ -75,7 +75,7 @@ class _PreState extends State<Pre_> {
               SizedBox(height: 220.00,),
               new InkWell(
                 splashColor: Color(0xFF424242),//it revealed white only when it's in a pressed state
-                onTap: () => Navigator.of(context).pushNamed('/'), //Actions when tapping the button
+                onTap: () => Navigator.of(context).pushNamed('/login'), //Actions when tapping the button
                 child: new Container(
                   //width: 100.0,
                   height: 35.0, //Button size
@@ -88,6 +88,9 @@ class _PreState extends State<Pre_> {
                     style: new TextStyle(
                         fontSize: 16.0,
                         color: Colors.orangeAccent
+
+
+
                     ),
                   ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pickup_app/Prelogin.dart';
 import 'package:pickup_app/map.dart';
 import 'package:pickup_app/login.dart';
 import 'form.dart';
@@ -21,7 +22,7 @@ class CorePage extends StatelessWidget {
             return buildWaitingScreen();
           }
           final bool isLoggedin = snapshot.hasData;
-            return isLoggedin ? MapPage() : Login();
+            return isLoggedin ? MapPage() : Pre_();
         });
   }
 

@@ -123,7 +123,7 @@ class _activityState extends State<activity> {
               ),
             ),
 //            SizedBox(height: 5.0,),
-            Padding(
+           /* Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45.0),
               child: new TextField(
                 controller: _locationController,
@@ -145,7 +145,48 @@ class _activityState extends State<activity> {
                     fontFamily: "Roboto",
                 ),
               ),
+            ),*/
+                Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: InkWell(
+                splashColor: Color(0xFF424242),//it revealed white only when it's in a pressed state
+               /* onTap: (){
+                  DatePicker.showDateTimePicker(
+                      context,
+                      showTitleActions: true,
+                      onChanged: (date) {
+                        print('change $date');
+                      }, onConfirm: (date) {
+                    print('confirm $date');
+                  },
+                      currentTime: DateTime.now()
+                  );
+                },*/
+                child: new Container(
+                  //width: 100.0,
+                  height: 35.0, //Button size
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                    border: new Border.all(color: Colors.white),
+                    borderRadius: new BorderRadius.circular(35.0),
+                  ),
+                  child: new Center(
+                    child: new Text(
+                      'Click to choose Location',
+                      style: new TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.orangeAccent
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
+
+
+
+
+
             SizedBox(height: 20.0,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
