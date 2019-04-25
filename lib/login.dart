@@ -57,6 +57,9 @@ class LoginState extends State<Login> {
       try {
         //if the user exists and is logging in
           globals.userId = await auth.signInWithEmaiAndPassword(_email, _password);
+          readGames();
+          getUser(globals.userId);
+          setmarks(); 
           //_showQuestionDialog();
           Navigator.pushNamed(context, '/');
       } catch (e) {

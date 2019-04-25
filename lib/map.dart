@@ -4,6 +4,7 @@ import 'auth.dart';
 import 'dart:async';
 import 'auth_provider.dart';
 import 'globals.dart' as globals;
+import 'classes.dart';
 
 class MapPage extends StatefulWidget{
   //MapPage({this.onLoggedOut});
@@ -77,6 +78,10 @@ class MapPageState extends State<MapPage>{
       zoom: 19.151926040649414);
 
     //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    
+
+
+
   Marker _pin = Marker(
     markerId: MarkerId('Ferrand'),
     position: LatLng(40.006009, -105.267693)
@@ -97,14 +102,15 @@ class MapPageState extends State<MapPage>{
     
     Marker _pin3 = Marker(
     markerId: MarkerId('Engineering Quads'),
-    position: LatLng(40.006813, -105.264942)
+    position: LatLng(40.006813, -105.264942),
     //position: LatLng(40.009448,-105.266813)
-    );    
+    );  
+     
 
 
   @override
   Widget build(BuildContext context) {
-
+    
     return MaterialApp(
       home: Scaffold(
         key: _scaffoldKey,
@@ -192,11 +198,7 @@ class MapPageState extends State<MapPage>{
                     onMapCreated: (GoogleMapController controller) {
                        _controller.complete(controller);
                        },
-                      markers: {
-              _pin,_pin1,_pin2,_pin3
-            }
-
-
+                      markers: globals.mapmarks
                        ),
                       
 

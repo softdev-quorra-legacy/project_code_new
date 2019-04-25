@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'globals.dart' as globals;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 //add dependency "firebase_database: ^2.0.3" to pubspec.yaml
 
 //import 'package:flutter/material.dart';
@@ -58,8 +59,35 @@ class User{
 //premade field list
 //globals.fields = [createField('Ferrand', 40.006009, -105.267693, 1), createField('Norlin Quad', 40.008729, -105.271468, 2), createField('Kittridge Fields', 40.002974, -105.259576, 3), createField('Engineering Quad', 40.006813, -105.264942, 4)];
 //globals.fields = fields;
+
+var fields = [createField('Ferrand', 40.006009, -105.267693, 1), createField('Norlin Quad', 40.008729, -105.271468, 2), createField('Kittridge Fields', 40.002974, -105.259576, 3), createField('Engineering Quad', 40.006813, -105.264942, 4)];
+
+void mapfields(){
+  print('mapping the fields');
+  Map<String, Field> fieldmap = new Map.fromIterable(fields,
+    key: (field) => field.name,
+    value: (field) => field,);
+  globals.fieldmap = fieldmap;
+}
 //connect to firebase
 final dbref = FirebaseDatabase.instance.reference();
+
+void setmarks(){
+  print('Creating Pins');
+  int i = 0;
+  while(i < globals.gameslist.length){
+    Game game = globals.gameslist[i];
+    print(game.gametype);
+    Marker thismark = Marker(
+      markerId: MarkerId(game.gametype),
+      position: LatLng(
+        game.playspace.lat,
+        game.playspace.lon,
+      ),
+    );
+    globals.mapmarks.add(thismark);
+  }
+}
 
 //function to create a field
 //takes name, both coorinates, id = pos in fields array
@@ -129,6 +157,8 @@ void updateGame(String title, String uid){
 //call this to receive a list of game objects, one for each game in the db
 //sets the global game list
 void readGames(){
+  mapfields();
+  print('reading games');
   //var tgame = new Game.exists('localgame', 3, 'yeet and yeetet', fields[0]);
   List<Game> games = [];
   dbref.child('games').once().then((DataSnapshot snapshot){
