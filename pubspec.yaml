@@ -24,6 +24,8 @@ dependencies:
 #  google_sign_in: 3.2.4
   location: ^2.3.5
   cloud_firestore: ^0.9.13
+  geolocator: '^3.0.1'
+
   flutter_alert: ^0.4.0
   geoflutterfire: ^2.0.3+2
   http: ^0.12.0+2
